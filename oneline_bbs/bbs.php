@@ -36,8 +36,9 @@ if (count($errors) === 0) {
   .date('Y-m-d H:i:s')."')";
 
   mysqli_query($link, $sql);
-}
 
+  header('Location:http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']);
+}
 ?>
 
 <!DOCTYPE html>
