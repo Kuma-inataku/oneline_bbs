@@ -23,7 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 $comment = null;
 if (!isset($_POST['comment']) || !strlen($_POST['comment'])) {
   $errors['comment'] = '一言を入力してください。';
-} elseif (strlen($_POST['comment'] > 200)) {
+} elseif (strlen($_POST['comment']) > 200) {
   $errors['comment'] = 'ひとことは200文字以下にしてください';
 } else {
   $comment = $_POST['comment'];
@@ -71,5 +71,25 @@ if (count($errors) === 0) {
     <input type="submit" value="送信">
   </div>
   </form>
+  <?php
+  $sql = "SELECT * FROM `post` ORDER BY `created_at` DESC";
+  $result = mysqli_query($link, $sql);
+  ?>
+  <?php if($result !== false && mysqli_num_rows($result)): ?>
+    <ul>
+      <?php while ($post = mysqli_fetch_assoc($result)): ?>
+      <li>
+        <?php echo htmlspecialchars($post['name'], ENT_QUOTES, 'UTF-8') ?> :
+        <?php echo htmlspecialchars($post['comment'], ENT_QUOTES, 'UTF-8') ?> - 
+        <?php echo htmlspecialchars($post['created_at'], ENT_QUOTES, 'UTF-8') ?>
+      </li>
+      <?php endwhile; ?>
+    </ul>
+  <?php endif; ?>
+
+  <?php 
+    mysqli_free_result($result);
+    mysqli_close($link);
+  ?>
 </body>
 </html>
