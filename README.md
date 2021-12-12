@@ -47,7 +47,22 @@ ex.
 
 mysql_connect → mysqli_connect
 
+### DB保存時
+```
+if (count($errors) === 0) {
+  $sql = "INSERT INTO `post` (`name`, `comment`, `created_at`) VALUES ('"
+  .mysqli_real_escape_string($link, $name)."','"
+  .mysqli_real_escape_string($link, $comment)."','"
+  .date('Y-m-d H:i:s')."')";
+}
+```
+
+* $errorsで常にエラーメッセージを意識しないといけないのはキツイ
+* foreachで回すとか、そもそもオブジェクト指向で全体を書くとか
+
+ 
 ## 書籍のミス修正
+
 ```
 $link = mysqli_connect('localhost', 'root', '');
 
@@ -76,5 +91,16 @@ mysqli_select_db($link, 'oneline_bbs');
 ```
 
 * 引数が逆
+
+### SQL設定
+```
+.mysqli_real_escape_string($name)."','"
+.mysqli_real_escape_string($comment)."','"
+↓  
+.mysqli_real_escape_string($link, $name)."','"
+.mysqli_real_escape_string($link, $comment)."','"
+```
+
+* 引数不足
 
 
