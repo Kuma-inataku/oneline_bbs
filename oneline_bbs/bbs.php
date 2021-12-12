@@ -2,8 +2,8 @@
 $link = mysqli_connect('localhost', 'root', 'root123');
 
 if (! $link) {
-  die('データベースに接続できません。：' . mysqli_error($link));
-  // die('データベースに接続できません。：'.mysqli_connect_error());
+  // die('データベースに接続できません。：' . mysqli_error($link));
+  die('データベースに接続できません。：'.mysqli_connect_error());
 }
 
 // mysqli_select_db('oneline_bbs', $link);
