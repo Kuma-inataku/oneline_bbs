@@ -2,11 +2,9 @@
 $link = mysqli_connect('localhost', 'root', 'root123');
 
 if (! $link) {
-  // die('データベースに接続できません。：' . mysqli_error($link));
   die('データベースに接続できません。：'.mysqli_connect_error());
 }
 
-// mysqli_select_db('oneline_bbs', $link);
 mysqli_select_db($link, 'oneline_bbs');
 
 $errors = array();
@@ -26,9 +24,18 @@ $comment = null;
 if (!isset($_POST['comment']) || !strlen($_POST['comment'])) {
   $errors['comment'] = '一言を入力してください。';
 } elseif (strlen($_POST['comment'] > 200)) {
-  $errors['cpmment'] = 'ひとことは200文字以下にしてください';
+  $errors['comment'] = 'ひとことは200文字以下にしてください';
 } else {
   $comment = $_POST['comment'];
+}
+
+if (count($errors) === 0) {
+  $sql = "INSERT INTO `post` (`name`, `comment`, `created_at`) VALUES ('"
+  .mysqli_real_escape_string($link, $name)."','"
+  .mysqli_real_escape_string($link, $comment)."','"
+  .date('Y-m-d H:i:s')."')";
+
+  mysqli_query($link, $sql);
 }
 
 ?>
@@ -42,10 +49,20 @@ if (!isset($_POST['comment']) || !strlen($_POST['comment'])) {
   <title>ひとこと掲示板</title>
 </head>
 <body>
+  <?php var_dump($_POST) ?>
   <h1>ひとこと掲示板</h1>
   <form action="bbs.php" method="post">
+    <?php if(count($errors)): ?>
+      <ul class="error_list">
+        <?php foreach ($errors as $error): ?>
+          <li>
+            <?php echo htmlspecialchars($error, ENT_QUOTES, 'UTF-8') ?>
+          </li>
+        <?php endforeach; ?>
+      </ul>
+    <?php endif; ?>
   <div>
-    名前：<input type="text" name="namr" id="">
+    名前：<input type="text" name="name" id="">
   </div>
   <div>
     ひとこと：<input type="text" name="comment" size="60" id="">
